@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>CastCam!</title>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8">
+    <style>
+      html,body {
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+      }
+      body {
+        background: linear-gradient(to bottom, #053d6a, #4d8fd1); 
+      }
+      .container {
+        position: absolute;
+        display:flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+      }
+      .row {
+        display: flex;
+        flex:1;
+      }
+      iframe {
+        flex:1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <iframe data-src="https://www.youtube.com/embed/eJ7ZkQ5TC08?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" ></iframe>
+        <iframe data-src="./single.html" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" ></iframe>
+      </div>
+      <!-- <div class="row">
+        <iframe data-src="https://www.youtube.com/embed/live_stream?channel=UCEw9FWym0_U4F_lR5RwI8mQ&autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" ></iframe>
+        <iframe data-src="https://www.youtube.com/embed/Vj0XKu6AoOw?rel=0&amp;autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" ></iframe>
+      </div> -->
+    </div>
+    <script>
+      Array.from(document.querySelectorAll('iframe')).forEach((el,idx) => {
+        setTimeout(() => el.src = el.getAttribute('data-src'), idx * 5 * 1e3)
+      });
+    </script>
+  </body>
+</html>
