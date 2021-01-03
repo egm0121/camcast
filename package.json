@@ -1,0 +1,24 @@
+{
+  "name": "castcam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egm0121/camcast.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/egm0121/camcast/issues"
+  },
+  "homepage": "https://github.com/egm0121/camcast#readme",
+  "dependencies": {
+    "castv2": "^0.1.10",
+    "express": "^4.17.1",
+    "mdns": "^2.7.2"
+  }
+}

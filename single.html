@@ -5,10 +5,13 @@
         margin: 0px;
         width: 100%;
         height: 100%;
+        background: #000f1c; 
       }
       iframe {
         width: 100%;
         height: 100%;
+        opacity: 0;
+        transition: opacity 1s linear;
       }
     </style>
   </head>
@@ -20,11 +23,16 @@
         'https://www.youtube.com/embed/eJ7ZkQ5TC08?autoplay=1',
         'https://www.youtube.com/embed/live_stream?channel=UCEw9FWym0_U4F_lR5RwI8mQ&autoplay=1',
         'https://www.youtube.com/embed/Vj0XKu6AoOw?rel=0&amp;autoplay=1',
-        
+        'https://www.youtube.com/embed/live_stream?channel=UCkCOI8G0lFa9zRX6gsIdvHw&autoplay=1',
+        'https://www.youtube.com/embed/live_stream?channel=UCYBug3X2e44dhTsoi0Q3Nng&autoplay=1',
+        'https://www.youtube.com/embed/live_stream?channel=UCYBug3X2e44dhTsoi0Q3Nng&autoplay=1',
+        'https://www.youtube.com/embed/Ihxkd2hPvh4?rel=0&amp;autoplay=1',
       ];
      let camIdx = 0;
      const onTick = () => {
+       document.querySelector('iframe').style.opacity = 0;
        document.querySelector('iframe').src = camsList[camIdx];
+       setTimeout(() => document.querySelector('iframe').style.opacity = 1, 2*1e3);
        camIdx++;
        if(camIdx === camsList.length) camIdx = 0;
      }
