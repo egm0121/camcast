@@ -48,7 +48,6 @@ app.get("/cast/start/", function(request, response){
       const castAppData = findApplicationReady(castAppId, data);
       if (castAppData) {
         console.log('Cast App is ready');
-        console.log(castAppData);
         castAppSessionId =  castAppData.sessionId;
         const transportId = castAppData.transportId;
         castAppConnection = client.createChannel('sender-0', transportId, 'urn:x-cast:com.google.cast.tp.connection', 'JSON');
@@ -73,22 +72,6 @@ app.get("/cast/stop", function(request, response){
   response.send('stop casting webcams');
 });
 
-// var browser = mdns.createBrowser(mdns.tcp('googlecast'));
-
-// browser.on('serviceUp', function(service) {
-//   console.log('found device %s at %s:%d', service.name, service.addresses[0], service.port);
-//   castDeviceHost = service.addresses[0];
-//   browser.stop();
-// });
-// browser.start();
-
-//if you have another mdns daemon running, like avahi or bonjour, uncomment following line
-if(process.platform !== 'darwin') {
-  console.log('exclude local interface');
-  mdns.excludeInterface('0.0.0.0');
-}
-
- 
 var browser = mdns.createBrowser();
  
 browser.on('ready', function () {
