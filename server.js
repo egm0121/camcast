@@ -1,6 +1,6 @@
 const express = require('express');
 var Client = require('castv2').Client;
-var mdns = require('mdns');
+var mdns = require('mdns-js');
 
 let app = express();
 let castDeviceHost = '';
@@ -73,13 +73,34 @@ app.get("/cast/stop", function(request, response){
   response.send('stop casting webcams');
 });
 
-var browser = mdns.createBrowser(mdns.tcp('googlecast'));
+// var browser = mdns.createBrowser(mdns.tcp('googlecast'));
 
-browser.on('serviceUp', function(service) {
-  console.log('found device %s at %s:%d', service.name, service.addresses[0], service.port);
-  castDeviceHost = service.addresses[0];
-  browser.stop();
+// browser.on('serviceUp', function(service) {
+//   console.log('found device %s at %s:%d', service.name, service.addresses[0], service.port);
+//   castDeviceHost = service.addresses[0];
+//   browser.stop();
+// });
+// browser.start();
+
+//if you have another mdns daemon running, like avahi or bonjour, uncomment following line
+if(process.platform !== 'darwin') {
+  console.log('exclude local interface');
+  mdns.excludeInterface('0.0.0.0');
+}
+
+ 
+var browser = mdns.createBrowser();
+ 
+browser.on('ready', function () {
+    browser.discover(); 
 });
-browser.start();
-
+browser.on('update', function (data) {
+    if(data){
+      const service = data.type.find(service => service.name === 'googlecast')
+      if(service){
+        console.log('found google chromecast via mdns');
+        castDeviceHost = data.addresses[0];
+      }
+    }
+});
 app.listen(8888)

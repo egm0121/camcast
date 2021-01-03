@@ -19,6 +19,7 @@
   "dependencies": {
     "castv2": "^0.1.10",
     "express": "^4.17.1",
-    "mdns": "^2.7.2"
+    "mdns": "^2.7.2",
+    "mdns-js": "^1.0.3"
   }
 }
