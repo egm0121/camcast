@@ -24,14 +24,16 @@ const findApplicationReady = (appId, data) => {
 }
 app.get("/cast/start/", function(request, response){
   const castTargetUrl = request.query.url || WEBCAM_WEB_APP_URL;
-  var client = new Client();
+  const client = new Client();
   if(!castDeviceHost) return false;
   client.connect(castDeviceHost, function() {
     // create various namespace handlers
     castConnection = client.createChannel('sender-0', 'receiver-0', 'urn:x-cast:com.google.cast.tp.connection', 'JSON');
-    var heartbeat  = client.createChannel('sender-0', 'receiver-0', 'urn:x-cast:com.google.cast.tp.heartbeat', 'JSON');
+    const heartbeat  = client.createChannel('sender-0', 'receiver-0', 'urn:x-cast:com.google.cast.tp.heartbeat', 'JSON');
     castReceiver   = client.createChannel('sender-0', 'receiver-0', 'urn:x-cast:com.google.cast.receiver', 'JSON');
-
+    castConnection.on('error', err =>console.log('castConnection error', err))
+    heartbeat.on('error', err =>console.log('heartbeat error', err))
+    castReceiver.on('error', err =>console.log('castReceiver error', err))
     // establish virtual connection to the receiver
     castConnection.send({ type: 'CONNECT' });
    
@@ -52,6 +54,8 @@ app.get("/cast/start/", function(request, response){
         const transportId = castAppData.transportId;
         castAppConnection = client.createChannel('sender-0', transportId, 'urn:x-cast:com.google.cast.tp.connection', 'JSON');
         castAppReceiver = client.createChannel('sender-0', transportId, 'urn:x-cast:com.url.cast');
+        castAppConnection.on('error', err =>console.log('castAppConnection error', err))
+        castAppReceiver.on('error', err =>console.log('castAppReceiver error', err))
         // connect to app reciever endpoint
         castAppConnection.send({ type: 'CONNECT' });
         // subscribe to app reciever messages
@@ -81,8 +85,8 @@ browser.on('update', function (data) {
     if(data){
       const service = data.type.find(service => service.name === 'googlecast')
       if(service){
-        console.log('found google chromecast via mdns');
         castDeviceHost = data.addresses[0];
+        console.log('found google chromecast via mdns',castDeviceHost );
       }
     }
 });
