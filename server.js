@@ -82,11 +82,11 @@ browser.on('ready', function () {
     browser.discover(); 
 });
 browser.on('update', function (data) {
-    if(data){
+    if(data && !castDeviceHost){
       const service = data.type.find(service => service.name === 'googlecast')
       if(service){
         castDeviceHost = data.addresses[0];
-        console.log('found google chromecast via mdns',castDeviceHost );
+        console.log('found google chromecast via mdns',castDeviceHost, service );
       }
     }
 });
