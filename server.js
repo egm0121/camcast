@@ -9,6 +9,7 @@ let castReceiver;
 let castConnection;
 let castAppConnection;
 let castAppReceiver;
+let pingRef;
 const castAppId = '5CB45E5A';
 const WEBCAM_WEB_APP_URL = 'https://egm0121.github.io/camcast/single.html';
 
@@ -37,10 +38,14 @@ app.get("/cast/start/", function(request, response){
     castReceiver.on('error', err =>console.log('castReceiver error', err))
     // establish virtual connection to the receiver
     castConnection.send({ type: 'CONNECT' });
-   
+    if(pingRef) clearInterval(pingRef);
     // start heartbeating
-    setInterval(function() {
-      heartbeat.send({ type: 'PING' });
+    pingRef = setInterval(function() {
+      try {
+        heartbeat.send({ type: 'PING' });
+      } catch(err){
+        console.log('heartbeat failed');
+      }
     }, 5000);
     // launch Cast Receiver app
     castReceiver.send({ type: 'LAUNCH', appId: castAppId, requestId: 1 });
@@ -70,11 +75,16 @@ app.get("/cast/start/", function(request, response){
 });
 
 app.get("/cast/stop", function(request, response){
-  if(castReceiver && castAppSessionId){
-    console.log('stop app session', castAppSessionId);
-    castReceiver.send({ type: 'STOP', sessionId: castAppSessionId, requestId: 2 });
+  try {
+    if(pingRef) clearInterval(pingRef);
+    if(castReceiver && castAppSessionId){
+      console.log('stop app session', castAppSessionId);
+      castReceiver.send({ type: 'STOP', sessionId: castAppSessionId, requestId: 2 });
+    }
+    response.send('stop casting webcams');
+  } catch(err){
+    console.log('cast/stop error', err);
   }
-  response.send('stop casting webcams');
 });
 
 var browser = mdns.createBrowser();
