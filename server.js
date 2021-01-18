@@ -26,6 +26,7 @@ app.get("/cast/start/", function(request, response){
   const castTargetUrl = request.query.url || WEBCAM_WEB_APP_URL;
   const client = new Client();
   if(!castDeviceHost) return false;
+  client.on('error', err =>console.log('cast client error', err));
   client.connect(castDeviceHost, function() {
     // create various namespace handlers
     castConnection = client.createChannel('sender-0', 'receiver-0', 'urn:x-cast:com.google.cast.tp.connection', 'JSON');
